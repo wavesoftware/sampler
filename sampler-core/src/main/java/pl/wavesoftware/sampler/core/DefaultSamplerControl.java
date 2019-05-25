@@ -18,6 +18,8 @@ package pl.wavesoftware.sampler.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.sampler.api.RandomSource;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
 import javax.annotation.Nullable;
 import java.util.Random;

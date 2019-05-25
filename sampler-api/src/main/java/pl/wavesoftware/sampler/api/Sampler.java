@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.sampler.core;
+package pl.wavesoftware.sampler.api;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
+/**
+ * Resolves a sample of a given spec.
+ *
+ * @param <T> a type of a sample
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 1.0.0
+ */
+public interface Sampler<T> {
 
-final class RandomSeedSupplier implements Supplier<String> {
-
-  private static final int BASE36 = 36;
-  private static final int MIN = 60_466_176;
-  private static final Random RANDOM = ThreadLocalRandom.current();
-
-  @Override
-  public String get() {
-    int calc = RANDOM.nextInt(Integer.MAX_VALUE - MIN) + MIN;
-    return Integer.toString(calc, BASE36);
-  }
+  /**
+   * Creates a new sample
+   *
+   * @return a created sample
+   */
+  T create();
 }

@@ -18,8 +18,8 @@ package pl.wavesoftware.sampler.spring;
 
 import org.springframework.context.ApplicationContext;
 import pl.wavesoftware.sampler.core.AbstractSamplerContext;
-import pl.wavesoftware.sampler.core.Sampler;
-import pl.wavesoftware.sampler.core.SamplerControl;
+import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
 class SpringSamplerContext extends AbstractSamplerContext {
 

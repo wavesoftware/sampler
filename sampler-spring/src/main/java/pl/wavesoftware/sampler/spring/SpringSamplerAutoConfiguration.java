@@ -23,9 +23,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import pl.wavesoftware.sampler.core.DefaultSamplerControl;
-import pl.wavesoftware.sampler.core.RandomSource;
-import pl.wavesoftware.sampler.core.SamplerContext;
-import pl.wavesoftware.sampler.core.SamplerControl;
+import pl.wavesoftware.sampler.api.RandomSource;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
 @ConditionalOnMissingBean(SamplerContext.class)
 public class SpringSamplerAutoConfiguration {

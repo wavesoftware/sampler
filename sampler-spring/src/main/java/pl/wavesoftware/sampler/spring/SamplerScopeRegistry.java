@@ -54,7 +54,7 @@ final class SamplerScopeRegistry implements DisposableBean {
     for (Map.Entry<String, Runnable> entry : destructionCallbacks.entrySet()) {
       try {
         entry.getValue().run();
-      } catch (Exception ex) {
+      } catch (RuntimeException ex) {
         LOGGER.error("Error occurred while destroying " + entry.getKey(), ex);
       }
     }

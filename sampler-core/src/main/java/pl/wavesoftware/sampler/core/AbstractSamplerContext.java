@@ -18,10 +18,19 @@ package pl.wavesoftware.sampler.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * An abstract implementation of {@link SamplerContext}.
+ * <p>
+ *     Subclasses should implement {@link #getSampler(Class)} method.
+ * </p>
+ * @see SamplerContext
+ */
 public abstract class AbstractSamplerContext
   implements SamplerContext, AutoCloseable {
 

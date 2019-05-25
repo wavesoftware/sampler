@@ -30,6 +30,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>pl.wavesoftware.sampler</groupId>
+      <artifactId>sampler-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -40,6 +45,21 @@
     <dependency>
       <groupId>pl.wavesoftware</groupId>
       <artifactId>eid-exceptions</artifactId>
+    </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>pl.wavesoftware.testing</groupId>
+      <artifactId>junit5-starter</artifactId>
+      <version>1.0.0</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pl.wavesoftware.sampler</groupId>
+      <artifactId>sampler-example-model</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

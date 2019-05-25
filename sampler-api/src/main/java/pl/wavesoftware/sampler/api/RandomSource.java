@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.sampler.core;
+package pl.wavesoftware.sampler.api;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
-final class RandomSeedSupplier implements Supplier<String> {
-
-  private static final int BASE36 = 36;
-  private static final int MIN = 60_466_176;
-  private static final Random RANDOM = ThreadLocalRandom.current();
-
-  @Override
-  public String get() {
-    int calc = RANDOM.nextInt(Integer.MAX_VALUE - MIN) + MIN;
-    return Integer.toString(calc, BASE36);
-  }
+/**
+ * A source of a {@link Random} to be used in samples randomization.
+ * Implementations should provide a deterministic way of providing Random
+ * values, so execution can be rerun if errors ware found.
+ *
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 1.0.0
+ */
+public interface RandomSource extends Supplier<Random> {
 }

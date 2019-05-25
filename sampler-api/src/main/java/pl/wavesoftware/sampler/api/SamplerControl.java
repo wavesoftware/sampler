@@ -14,21 +14,32 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.sampler.core;
+package pl.wavesoftware.sampler.api;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
+import java.util.UUID;
 
-final class RandomSeedSupplier implements Supplier<String> {
+/**
+ * User can you this interface to control the scope of a tests
+ *
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 1.0.0
+ */
+public interface SamplerControl {
+  /**
+   * Gets actual ID of sampler scope
+   *
+   * @return an ID
+   */
+  UUID actualId();
 
-  private static final int BASE36 = 36;
-  private static final int MIN = 60_466_176;
-  private static final Random RANDOM = ThreadLocalRandom.current();
+  /**
+   * Sets new generated ID for sampler scope
+   */
+  void newId();
 
-  @Override
-  public String get() {
-    int calc = RANDOM.nextInt(Integer.MAX_VALUE - MIN) + MIN;
-    return Integer.toString(calc, BASE36);
-  }
+  /**
+   * Set a given ID as a sampler scope ID
+   * @param id and ID
+   */
+  void setId(UUID id);
 }
