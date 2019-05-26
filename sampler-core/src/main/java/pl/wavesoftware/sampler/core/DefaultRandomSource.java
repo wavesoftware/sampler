@@ -23,8 +23,8 @@ import pl.wavesoftware.sampler.api.EnvironmentResolver;
 import pl.wavesoftware.sampler.api.RandomSource;
 
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.Random;
+import java.util.zip.CRC32;
 
 /**
  * <p>
@@ -48,13 +48,13 @@ public class DefaultRandomSource implements RandomSource {
   private final Lazy<Random> randomLazy = Lazy.of(this::doGet);
   private final EnvironmentResolver environmentResolver;
 
-  protected DefaultRandomSource(EnvironmentResolver environmentResolver) {
-    this.environmentResolver = environmentResolver;
+  @Override
+  public long nextLong() {
+    return randomLazy.get().nextLong();
   }
 
-  @Override
-  public Random get() {
-    return randomLazy.get();
+  protected DefaultRandomSource(EnvironmentResolver environmentResolver) {
+    this.environmentResolver = environmentResolver;
   }
 
   private Random doGet() {
@@ -68,6 +68,12 @@ public class DefaultRandomSource implements RandomSource {
         "property `-D{}={}` with that seed value.",
       seed, seed, SAMPLER_SEED_PROPERTY, seed
     );
-    return new SecureRandom(seed.getBytes(StandardCharsets.UTF_8));
+    byte[] bytes = seed.getBytes(StandardCharsets.UTF_8);
+    CRC32 crc32 = new CRC32();
+    crc32.update(bytes);
+    long longSeed = crc32.getValue();
+    @SuppressWarnings("squid:S2245")
+    Random rng = new Random(longSeed);
+    return rng;
   }
 }

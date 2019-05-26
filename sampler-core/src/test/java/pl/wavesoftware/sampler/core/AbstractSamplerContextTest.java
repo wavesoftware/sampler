@@ -6,12 +6,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.wavesoftware.sampler.api.RandomSource;
 import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerControl;
 import pl.wavesoftware.sampler.example.model.User;
 import pl.wavesoftware.sampler.example.sample.user.JohnDoe;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -30,10 +33,18 @@ class AbstractSamplerContextTest {
   @Mock
   private User userSample;
 
+  @Mock
+  private RandomSource randomSource;
+
   @AfterEach
   void after() {
     Mockito.validateMockitoUsage();
-    Mockito.verifyNoMoreInteractions(samplerControl, userSample, userSampler);
+    Mockito.verifyNoMoreInteractions(
+      samplerControl,
+      userSample,
+      userSampler,
+      randomSource
+    );
   }
 
   @Test
@@ -41,7 +52,8 @@ class AbstractSamplerContextTest {
   void get() {
     // given
     when(userSampler.create()).thenReturn(userSample);
-    try(AbstractSamplerContext ctx = new AbstractSamplerContext() {
+    when(randomSource.nextLong()).thenReturn(1L, 2L);
+    try(AbstractSamplerContext ctx = new AbstractSamplerContext(randomSource) {
 
       @Override
       public SamplerControl controller() {
@@ -61,5 +73,7 @@ class AbstractSamplerContextTest {
       assertThat(user1).isNotNull();
       assertThat(user1).isSameAs(user2);
     }
+
+    verify(randomSource, times(2)).nextLong();
   }
 }

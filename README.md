@@ -7,7 +7,7 @@ A typesafe engine for your project examples
 ## Installation
 
 ```xml
-<!-- For Spring Test integration -->
+<!-- For Spring integration -->
 <dependency>
   <groupId>pl.wavesoftware.sampler</groupId>
   <artifactId>sampler-spring</artifactId>

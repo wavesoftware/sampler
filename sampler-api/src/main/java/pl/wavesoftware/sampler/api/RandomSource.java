@@ -20,12 +20,33 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 /**
- * A source of a {@link Random} to be used in samples randomization.
+ * A source of a {@link Random randomness} to be used in samples randomization.
  * Implementations should provide a deterministic way of providing Random
  * values, so execution can be rerun if errors ware found.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 1.0.0
  */
-public interface RandomSource extends Supplier<Random> {
+public interface RandomSource {
+
+  /**
+   * Returns the next pseudorandom, uniformly distributed {@code long}
+   * value from this random number generator's sequence. The general
+   * contract of {@code nextLong} is that one {@code long} value is
+   * pseudorandomly generated and returned.
+   *
+   * <p>The method {@code nextLong} is implemented by class {@code Random}
+   * as if by:
+   *  <pre> {@code
+   * public long nextLong() {
+   *   return ((long)next(32) << 32) + next(32);
+   * }}</pre>
+   *
+   * Because class {@code Random} uses a seed with only 48 bits,
+   * this algorithm will not return all possible {@code long} values.
+   *
+   * @return the next pseudorandom, uniformly distributed {@code long}
+   *         value from this random number generator's sequence
+   */
+  long nextLong();
 }

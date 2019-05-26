@@ -22,9 +22,15 @@ import pl.wavesoftware.sampler.api.RandomSource;
 import pl.wavesoftware.sampler.api.SamplerControl;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.UUID;
 
+/**
+ * A default implementation of {@link SamplerControl} using
+ * {@link RandomSource}.
+ *
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 1.0.0
+ */
 public final class DefaultSamplerControl implements SamplerControl {
 
   private static final Logger LOGGER =
@@ -45,14 +51,17 @@ public final class DefaultSamplerControl implements SamplerControl {
 
   @Override
   public void newId() {
-    Random random = randomSource.get();
-    setId(new UUID(random.nextLong(), random.nextLong()));
+    setId(newUuid());
   }
 
   @Override
   public synchronized void setId(UUID id) {
     LOGGER.info("Sampler ID: {}", id);
     this.id = id;
+  }
+
+  private UUID newUuid() {
+    return new UUID(randomSource.nextLong(), randomSource.nextLong());
   }
 
   private UUID ensureId() {

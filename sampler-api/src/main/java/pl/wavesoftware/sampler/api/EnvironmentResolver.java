@@ -27,11 +27,12 @@ import java.util.function.Supplier;
  *     Implementations should resolve properties, trying to change their
  *     form if not found at base. For ex.: if user pass property
  *     <code>some.property</code>, this implementation should try to resolve:
- *     <ul>
- *         <li><code>System.getProperty("some.property")</code></li>
- *         <li><code>System.getenv("SOME_PROPERTY")</code></li>
- *     </ul>
  * </p>
+ * <ul>
+ *     <li><code>System.getProperty("some.property")</code></li>
+ *     <li><code>System.getenv("SOME_PROPERTY")</code></li>
+ * </ul>
+ *
  * 
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 1.0.0

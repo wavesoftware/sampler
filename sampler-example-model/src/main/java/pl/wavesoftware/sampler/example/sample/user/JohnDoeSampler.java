@@ -19,7 +19,7 @@ final class JohnDoeSampler implements JohnDoe {
   @Override
   public User create() {
     User user = new User();
-    user.setId(randomSource.get().nextLong());
+    user.setId(randomSource.nextLong());
     user.setName("John");
     user.addGroup(samplerContext.get(Admin.class));
     user.addGroup(samplerContext.get(RemoteDesktop.class));

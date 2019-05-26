@@ -58,8 +58,9 @@ public class SpringSamplerAutoConfiguration {
   )
   SamplerContext samplerContext(
     ApplicationContext applicationContext,
-    SamplerControl samplerControl
+    SamplerControl samplerControl,
+    RandomSource randomSource
   ) {
-    return new SpringSamplerContext(applicationContext, samplerControl);
+    return new SpringSamplerContext(applicationContext, samplerControl, randomSource);
   }
 }
