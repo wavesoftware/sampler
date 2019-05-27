@@ -18,23 +18,45 @@ package pl.wavesoftware.sampler.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.sampler.api.RandomSource;
+import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
+/**
+ * An abstract implementation of {@link SamplerContext}.
+ * <p>
+ *     Subclasses should implement {@link #getSampler(Class)} method.
+ * </p>
+ * @see SamplerContext
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 1.0.0
+ */
 public abstract class AbstractSamplerContext
   implements SamplerContext, AutoCloseable {
 
   private static final Logger LOGGER =
     LoggerFactory.getLogger(AbstractSamplerContext.class);
   private final Map<Class<? extends Sampler<?>>, Object> samples =
-    new HashMap<>();
+    Collections.synchronizedMap(new HashMap<>());
+  private final ResolutionContext resolutionContext;
+
+  protected AbstractSamplerContext(RandomSource randomSource) {
+    this.resolutionContext = new DefaultResolutionContext(
+      samples::put,
+      this::find,
+      randomSource
+    );
+  }
 
   @Override
   public <T> T get(Class<? extends Sampler<T>> spec) {
-    @SuppressWarnings("unchecked")
-    T val = (T) samples.computeIfAbsent(spec, ignored -> createNew(spec));
-    return val;
+    return resolve(spec, () -> createNew(spec));
   }
 
   @Override
@@ -55,4 +77,19 @@ public abstract class AbstractSamplerContext
   }
 
   protected abstract <T> Sampler<T> getSampler(Class<? extends Sampler<T>> spec);
+
+  private <T> Optional<T> find(Class<? extends Sampler<T>> spec) {
+    if (samples.containsKey(spec)) {
+      @SuppressWarnings("unchecked")
+      T sample = (T) samples.get(spec);
+      return Optional.of(sample);
+    }
+    return Optional.empty();
+  }
+
+  private <T> T resolve(Class<? extends Sampler<T>> spec, Supplier<T> creator) {
+    try (ResolutionTransaction<T> transaction = resolutionContext.open(spec)) {
+      return transaction.resolve(creator);
+    }
+  }
 }

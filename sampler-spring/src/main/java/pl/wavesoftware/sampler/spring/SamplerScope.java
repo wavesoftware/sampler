@@ -21,12 +21,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
-import pl.wavesoftware.sampler.core.SamplerControl;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static io.vavr.collection.HashMap.ofAll;
 
 final class SamplerScope implements Scope, DisposableBean {
   static final String SAMPLE_SCOPE = "sample";
@@ -68,14 +70,18 @@ final class SamplerScope implements Scope, DisposableBean {
   }
 
   private SamplerScopeRegistry getRegistry() {
-    return registries.computeIfAbsent(samplerControl.actualId(), ignored -> new SamplerScopeRegistry());
+    return registries.computeIfAbsent(
+      samplerControl.actualId(), ignored -> new SamplerScopeRegistry()
+    );
   }
 
   @Override
   public void destroy() {
-    for (Map.Entry<UUID, SamplerScopeRegistry> entry : registries.entrySet()) {
-      LOGGER.info("Closing sample scope: {}", entry.getKey());
-      entry.getValue().destroy();
-    }
+    ofAll(registries).forEach(SamplerScope::destroyRegistry);
+  }
+
+  private static void destroyRegistry(UUID id, SamplerScopeRegistry registry) {
+    LOGGER.info("Closing sampler scope: {}", id);
+    registry.destroy();
   }
 }

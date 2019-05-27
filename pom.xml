@@ -62,7 +62,8 @@
   <modules>
     <module>sampler-core</module>
     <module>sampler-spring</module>
-    <module>sampler-junit5</module>
+    <module>sampler-example-model</module>
+    <module>sampler-api</module>
   </modules>
   
   <scm>

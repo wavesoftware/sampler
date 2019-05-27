@@ -17,16 +17,22 @@
 package pl.wavesoftware.sampler.spring;
 
 import org.springframework.context.ApplicationContext;
+import pl.wavesoftware.sampler.api.RandomSource;
+import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerControl;
 import pl.wavesoftware.sampler.core.AbstractSamplerContext;
-import pl.wavesoftware.sampler.core.Sampler;
-import pl.wavesoftware.sampler.core.SamplerControl;
 
 class SpringSamplerContext extends AbstractSamplerContext {
 
   private final ApplicationContext context;
   private final SamplerControl control;
 
-  SpringSamplerContext(ApplicationContext context, SamplerControl control) {
+  SpringSamplerContext(
+    ApplicationContext context,
+    SamplerControl control,
+    RandomSource randomSource
+  ) {
+    super(randomSource);
     this.context = context;
     this.control = control;
   }

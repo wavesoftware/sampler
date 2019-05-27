@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pl.wavesoftware.sampler.core.SamplerContext;
-import pl.wavesoftware.sampler.spring.example.UserModelSamplesContext;
-import pl.wavesoftware.sampler.spring.example.model.Group;
-import pl.wavesoftware.sampler.spring.example.model.User;
-import pl.wavesoftware.sampler.spring.example.user.JohnDoe;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.example.UserModelSamplesContext;
+import pl.wavesoftware.sampler.example.model.Group;
+import pl.wavesoftware.sampler.example.model.User;
+import pl.wavesoftware.sampler.example.sample.user.JohnDoe;
 
 import java.util.UUID;
 

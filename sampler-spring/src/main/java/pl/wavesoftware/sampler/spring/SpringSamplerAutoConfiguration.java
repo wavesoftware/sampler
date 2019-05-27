@@ -19,14 +19,19 @@ package pl.wavesoftware.sampler.spring;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import pl.wavesoftware.sampler.core.DefaultSamplerControl;
-import pl.wavesoftware.sampler.core.RandomSource;
-import pl.wavesoftware.sampler.core.SamplerContext;
-import pl.wavesoftware.sampler.core.SamplerControl;
+import pl.wavesoftware.sampler.api.RandomSource;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
+/**
+ * This is a Spring Boot style auto-configuration class. It can be used also
+ * without Spring Boot with {@link Import} annotation.
+ */
 @ConditionalOnMissingBean(SamplerContext.class)
 public class SpringSamplerAutoConfiguration {
   @Bean
@@ -53,13 +58,14 @@ public class SpringSamplerAutoConfiguration {
 
   @Bean
   @Scope(
-    proxyMode = ScopedProxyMode.INTERFACES,
-    value = SamplerScope.SAMPLE_SCOPE
+    value = SamplerScope.SAMPLE_SCOPE,
+    proxyMode = ScopedProxyMode.INTERFACES
   )
   SamplerContext samplerContext(
     ApplicationContext applicationContext,
-    SamplerControl samplerControl
+    SamplerControl samplerControl,
+    RandomSource randomSource
   ) {
-    return new SpringSamplerContext(applicationContext, samplerControl);
+    return new SpringSamplerContext(applicationContext, samplerControl, randomSource);
   }
 }

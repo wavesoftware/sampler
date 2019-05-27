@@ -17,11 +17,11 @@
 package pl.wavesoftware.sampler.spring;
 
 import org.springframework.core.env.Environment;
-import pl.wavesoftware.sampler.core.AbstractRandomSource;
+import pl.wavesoftware.sampler.core.DefaultRandomSource;
 
 import java.util.Optional;
 
-final class SpringRandomSource extends AbstractRandomSource {
+final class SpringRandomSource extends DefaultRandomSource {
 
   SpringRandomSource(Environment environment) {
     super((property, defaultValueSupplier) ->

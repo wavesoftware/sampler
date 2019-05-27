@@ -16,8 +16,6 @@
 
 package pl.wavesoftware.sampler.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectFactory;
 
@@ -26,10 +24,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-final class SamplerScopeRegistry implements DisposableBean {
+import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
 
-  private static final Logger LOGGER =
-    LoggerFactory.getLogger(SamplerScopeRegistry.class);
+final class SamplerScopeRegistry implements DisposableBean {
 
   private final Map<String, Object> objects =
     Collections.synchronizedMap(new HashMap<>());
@@ -42,7 +39,12 @@ final class SamplerScopeRegistry implements DisposableBean {
 
   @Nullable
   Object remove(String name) {
-    return objects.remove(name);
+    Object bean = objects.remove(name);
+    if (bean != null && destructionCallbacks.containsKey(name)) {
+      Runnable callback = destructionCallbacks.remove(name);
+      callback.run();
+    }
+    return bean;
   }
 
   void registerDestructionCallback(String name, Runnable runnable) {
@@ -52,11 +54,7 @@ final class SamplerScopeRegistry implements DisposableBean {
   @Override
   public void destroy() {
     for (Map.Entry<String, Runnable> entry : destructionCallbacks.entrySet()) {
-      try {
-        entry.getValue().run();
-      } catch (Exception ex) {
-        LOGGER.error("Error occurred while destroying " + entry.getKey(), ex);
-      }
+      tryToExecute(() -> entry.getValue().run(), "20190527:213218");
     }
   }
 }
