@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.sampler.spring;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * This annotation represent a sampler component. It's useful to define a
+ * Spring Beans that will be scanned by {@link ComponentScan} mechanism.
+ */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
