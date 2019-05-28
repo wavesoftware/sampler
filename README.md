@@ -43,9 +43,8 @@ please open an [issue](https://github.com/wavesoftware/sampler/issues).
 
 ## Requirements
 
-* Java 8
-* Spring module requires any modern Spring, tested against latest 5.1.x, but 
-should work in Spring 3+ 
+* Java 8+ (Tested on JDK 8, 9, and 11)
+* Spring module requires any modern Spring, tested against latest 5.1.x, but should work in Spring 3+ 
 
 ## Releases
 
