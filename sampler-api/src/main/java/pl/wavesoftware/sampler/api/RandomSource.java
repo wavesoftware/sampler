@@ -17,7 +17,6 @@
 package pl.wavesoftware.sampler.api;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 /**
  * A source of a {@link Random randomness} to be used in samples randomization.
