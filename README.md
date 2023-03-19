@@ -9,7 +9,7 @@ A typesafe engine for your project examples
 <dependency>
   <groupId>pl.wavesoftware.sampler</groupId>
   <artifactId>sampler-spring</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -169,6 +169,9 @@ please open an [issue](https://github.com/wavesoftware/sampler/issues).
   should work in Spring 3+ as well.
 
 ## Releases
+
+* `1.1.0` - codename: *FriarySparkle*
+  * Migrate to Spring Boot 3.x
 
 * `1.0.0` - codename: *BananaBow*
 	* First publicly available release
