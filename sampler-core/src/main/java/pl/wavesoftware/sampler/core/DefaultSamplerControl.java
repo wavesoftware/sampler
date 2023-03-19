@@ -22,6 +22,7 @@ import pl.wavesoftware.sampler.api.RandomSource;
 import pl.wavesoftware.sampler.api.SamplerControl;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -58,6 +59,11 @@ public final class DefaultSamplerControl implements SamplerControl {
   public synchronized void setId(UUID id) {
     LOGGER.info("Sampler ID: {}", id);
     this.id = id;
+  }
+
+  @Override
+  public Random random() {
+    return new Random(randomSource.nextLong());
   }
 
   private UUID newUuid() {

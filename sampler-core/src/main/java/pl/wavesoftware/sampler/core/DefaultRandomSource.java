@@ -53,7 +53,11 @@ public class DefaultRandomSource implements RandomSource {
     return randomLazy.get().nextLong();
   }
 
-  protected DefaultRandomSource(EnvironmentResolver environmentResolver) {
+  public DefaultRandomSource() {
+    this(new DefaultEnvironmentResolver());
+  }
+
+  public DefaultRandomSource(EnvironmentResolver environmentResolver) {
     this.environmentResolver = environmentResolver;
   }
 
@@ -70,7 +74,7 @@ public class DefaultRandomSource implements RandomSource {
     );
     byte[] bytes = seed.getBytes(StandardCharsets.UTF_8);
     CRC32 crc32 = new CRC32();
-    crc32.update(bytes);
+    crc32.update(bytes, 0, bytes.length);
     long longSeed = crc32.getValue();
     @SuppressWarnings("squid:S2245")
     Random rng = new Random(longSeed);

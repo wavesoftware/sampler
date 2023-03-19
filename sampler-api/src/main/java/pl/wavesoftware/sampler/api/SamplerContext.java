@@ -23,7 +23,7 @@ package pl.wavesoftware.sampler.api;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 1.0.0
  */
-public interface SamplerContext {
+public interface SamplerContext extends AutoCloseable {
   /**
    * Gets a created sample or create one if it wasn't created before
    *
@@ -48,4 +48,6 @@ public interface SamplerContext {
    * @return a controller for sampler context
    */
   SamplerControl controller();
+
+  void close();
 }

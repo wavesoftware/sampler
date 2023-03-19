@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.sampler.api;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -42,4 +43,11 @@ public interface SamplerControl {
    * @param id and ID
    */
   void setId(UUID id);
+
+  /**
+   * Creates a predictable Random instance that can be used to generate
+   * randomized samples.
+   * @return a new random instance
+   */
+  Random random();
 }

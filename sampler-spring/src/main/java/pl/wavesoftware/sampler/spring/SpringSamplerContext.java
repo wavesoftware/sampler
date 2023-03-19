@@ -25,25 +25,18 @@ import pl.wavesoftware.sampler.core.AbstractSamplerContext;
 class SpringSamplerContext extends AbstractSamplerContext {
 
   private final ApplicationContext context;
-  private final SamplerControl control;
 
   SpringSamplerContext(
     ApplicationContext context,
     SamplerControl control,
     RandomSource randomSource
   ) {
-    super(randomSource);
+    super(randomSource, control);
     this.context = context;
-    this.control = control;
   }
 
   @Override
   protected <T> Sampler<T> getSampler(Class<? extends Sampler<T>> spec) {
     return context.getBean(spec);
-  }
-
-  @Override
-  public SamplerControl controller() {
-    return control;
   }
 }

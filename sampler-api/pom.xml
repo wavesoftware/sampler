@@ -4,7 +4,7 @@
   <parent>
     <groupId>pl.wavesoftware.sampler</groupId>
     <artifactId>sampler-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>main-SNAPSHOT</version>
   </parent>
 
   <artifactId>sampler-api</artifactId>

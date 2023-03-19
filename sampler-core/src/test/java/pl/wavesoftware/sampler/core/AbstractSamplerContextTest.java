@@ -53,13 +53,7 @@ class AbstractSamplerContextTest {
     // given
     when(userSampler.create()).thenReturn(userSample);
     when(randomSource.nextLong()).thenReturn(1L, 2L);
-    try(AbstractSamplerContext ctx = new AbstractSamplerContext(randomSource) {
-
-      @Override
-      public SamplerControl controller() {
-        return samplerControl;
-      }
-
+    try(AbstractSamplerContext ctx = new AbstractSamplerContext(randomSource, samplerControl) {
       @Override
       protected <T> Sampler<T> getSampler(Class<? extends Sampler<T>> spec) {
         return (Sampler<T>) userSampler;

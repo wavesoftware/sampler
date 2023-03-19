@@ -1,5 +1,6 @@
 package pl.wavesoftware.sampler.example.model;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +15,13 @@ import java.util.Set;
  */
 @Setter
 @Getter
+@Builder
 @EqualsAndHashCode(of = "id")
 @ToString(of = {"id", "name"})
 public class User {
   private Long id;
   private String name;
-  private Set<Group> groups = new HashSet<>();
+  private Set<Group> groups;
 
   public void addGroup(Group group) {
     groups.add(group);

@@ -1,7 +1,6 @@
 package pl.wavesoftware.sampler.example.sample.user;
 
 import org.springframework.context.annotation.Bean;
-import pl.wavesoftware.sampler.api.RandomSource;
 import pl.wavesoftware.sampler.api.SamplerContext;
 
 /**
@@ -10,7 +9,7 @@ import pl.wavesoftware.sampler.api.SamplerContext;
  */
 public class UserSamplerContext {
   @Bean
-  JohnDoe johnDoe(SamplerContext samplerContext, RandomSource randomSource) {
-    return new JohnDoeSampler(samplerContext, randomSource);
+  JohnDoe johnDoe(SamplerContext samplerContext) {
+    return new JohnDoeSampler(samplerContext);
   }
 }

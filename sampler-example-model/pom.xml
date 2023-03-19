@@ -4,7 +4,7 @@
   <parent>
     <groupId>pl.wavesoftware.sampler</groupId>
     <artifactId>sampler-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>main-SNAPSHOT</version>
   </parent>
 
   <artifactId>sampler-example-model</artifactId>
@@ -19,13 +19,16 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.2</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>pl.wavesoftware</groupId>
       <artifactId>eid-exceptions</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
     </dependency>
   </dependencies>
 

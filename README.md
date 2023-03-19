@@ -1,7 +1,5 @@
 # Sampler for Java
 
-[![Build Status](https://travis-ci.org/wavesoftware/sampler.svg?branch=develop)](https://travis-ci.org/wavesoftware/sampler) [![Build status](https://ci.appveyor.com/api/projects/status/g0fxplnjxk9kt2s2/branch/develop?svg=true)](https://ci.appveyor.com/project/cardil/sampler/branch/develop) [![Quality Gate](https://sonar.wavesoftware.pl/api/badges/gate?key=pl.wavesoftware.sampler:sampler-parent)](https://sonar.wavesoftware.pl/dashboard/index/pl.wavesoftware.sampler:sampler-parent) [![Technical Dept](https://sonar.wavesoftware.pl/api/badges/measure?key=pl.wavesoftware.sampler:sampler-parent&metric=sqale_debt_ratio)](https://sonar.wavesoftware.pl/dashboard/index/pl.wavesoftware.sampler:sampler-parent) [![codecov](https://codecov.io/gh/wavesoftware/sampler/branch/develop/graph/badge.svg)](https://codecov.io/gh/wavesoftware/sampler) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/pl.wavesoftware.sampler/sampler-spring/badge.svg)](https://maven-badges.herokuapp.com/maven-central/pl.wavesoftware.sampler/sampler-spring)
-
 A typesafe engine for your project examples
 
 ## Installation
@@ -18,33 +16,157 @@ A typesafe engine for your project examples
 
 ## Usage
 
-Simply adding a dependency should do the trick. There will be:
 
- * logging configured with log4j2, slf4j, jul and jcl
- * proper logging integration with Spring/Spring-Boot, if present, and `EnableAutoConfiguration` 
- is used.
- * color logs
- * logging collector for log4j2 for testing purposes
+### Basic usage
+
+You can create a sample classes by implementing `Sampler<T>` interface.
+
+```java
+@Sample
+public final class Jsr305Artifact implements Sampler<Artifact> {
+  private final SamplerContext context;
+
+  Jsr305Artifact(SamplerContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public Artifact create() {
+    return new MavenlikeArtifact(
+      context,
+      "jsr305",
+      "com.google.code.findbugs",
+      new Semver("3.0.2")
+    );
+  }
+}
+```
+
+The `SampleContext` can be used to get instances of other samples, to achieve consistency across complex sample graphs.
+
+```java
+@Sample
+public final class SimpleProject implements Sampler<Project> {
+
+  private final SamplerContext context;
+
+  SimpleProject(SamplerContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public Project create() {
+    Path root = context.get(ProjectRoot.class);
+    return new AbstractProject(root, "simple") {
+      @Override
+      public Set<Artifact> dependencies() {
+        return HashSet
+            .of(HibernateArtifact.class, Jsr305Artifact.class)
+            .map(context::get);
+      }
+    };
+  }
+}
+```
+
+### Vanilla Java
+
+To use Sampler in vanilla Java, you need to create a `SamplerContext` instance,
+and register all samples in it.
+
+```java
+class SampleTests {
+  @Test
+  void samples() {
+    var samplers = HashMap.of(JohnDoe.class, (Sampler<User>) () -> User.builder()
+      .id(43L)
+      .name("John Doe")
+      .build()
+    );
+    try (var ctx = new StaticSamplerContext(samplers)) {
+      User user = ctx.get(JohnDoe.class);
+      assertThat(user).isNotNull();
+    }
+  }
+}
+```
+
+### Spring integration
+
+To use Sampler in Spring, you need to autowire a `SamplerContext` instance. If
+you are using the Spring Boot, the `SamplerContext` is already available as a
+bean. You need to register all samples using `@Sample` annotation.
+
+```java
+@Configuration
+class Samples {
+  @Bean
+  Sampler<User> johnDoe() {
+    return () -> User.builder()
+      .id(43L)
+      .name("John Doe")
+      .build();
+  }
+}
+```
+
+Using it is also simple
+
+```java
+@SpringBootTest
+class SampleTests {
+  @Autowired
+  private SamplerContext ctx;
+
+  @Test
+  void samples() {
+    User user = ctx.get(JohnDoe.class);
+    assertThat(user).isNotNull();
+  }
+}
+```
+
+### Random samples
+
+If you like to randomize your samples, you can use user the
+`SamplerContext#controller()` method to get a `SamplerController` instance.
+Using sample controller you can fetch a `Random` instance, and use it to create
+random samples.
+
+If you happen to encounter a situation where you need to re-create a given
+randomized execution, like a failure on CI system, you can use the
+`sampler.seed` system property, or `SAMPLER_SEED` environment variable to
+recreate same execution. The seed used by `DefaultRandomSource` is printed on
+console during the execution.
+
+```java
+@Sample
+@RequiredArgsConstructor
+class JohnDoe implements Sampler<User> {
+  private final SamplerContext ctx;
+
+  @Override
+  public User create() {
+    return User.builder()
+      .id(ctx.controller().random().nextLong())
+      .name("John Doe")
+      .build();
+  }
+}
+```
 
 ## Contributing
 
-Contributions are welcome!
+Contributions are welcome! To contribute, file a PR.
 
-To contribute, follow the standard [git flow](http://danielkummer.github.io/git-flow-cheatsheet/) of:
-
-1. Fork it
-1. Create your feature branch (`git checkout -b feature/my-new-feature`)
-1. Commit your changes (`git commit -am 'Add some feature'`)
-1. Push to the branch (`git push origin feature/my-new-feature`)
-1. Create new Pull Request
-
-Even if you can't contribute code, if you have an idea for an improvement 
+Even if you can't contribute code, if you have an idea for an improvement
 please open an [issue](https://github.com/wavesoftware/sampler/issues).
 
 ## Requirements
 
-* Java 8+ (Tested on JDK 8, 9, and 11)
-* Spring module requires any modern Spring, tested against latest 5.1.x, but should work in Spring 3+ 
+* Java 11+ (Tested on JDK 11, and 17)
+* Spring module requires any modern Spring, tested against latest 6.x, but
+  should work in Spring 3+ as well.
 
 ## Releases
 

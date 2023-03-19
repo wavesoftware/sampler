@@ -20,12 +20,12 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-dependencies</artifactId>
-    <version>2.1.5.RELEASE</version>
+    <version>3.0.4</version>
     <relativePath />
   </parent>
   <groupId>pl.wavesoftware.sampler</groupId>
   <artifactId>sampler-parent</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>main-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Sampler</name>
   <description>
@@ -63,7 +63,7 @@
     <module>sampler-example-model</module>
     <module>sampler-api</module>
   </modules>
-  
+
   <scm>
     <connection>scm:git:https://github.com/wavesoftware/sampler.git</connection>
     <developerConnection>scm:git:git@github.com:wavesoftware/sampler.git</developerConnection>
@@ -96,14 +96,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sonar.working.directory>${project.build.directory}/sonar</sonar.working.directory>
-    <sonar.host.url>https://sonar.wavesoftware.pl</sonar.host.url>
     <sonar.jacoco.dataPath>${project.rootdir}/target/jacoco.exec</sonar.jacoco.dataPath>
     <sonar.jacoco.itDataPath>${project.rootdir}/target/jacoco-it.exec</sonar.jacoco.itDataPath>
     <sonar.jacoco.reportPaths>${project.rootdir}/target/jacoco.exec,${project.rootdir}/target/jacoco-it.exec</sonar.jacoco.reportPaths>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <java.source.version>8</java.source.version>
+    <java.source.version>11</java.source.version>
     <sonar.java.source>${java.source.version}</sonar.java.source>
-    <maven.compiler.source>1.${java.source.version}</maven.compiler.source>
+    <maven.compiler.source>${java.source.version}</maven.compiler.source>
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
     <unpack-manifestmf.skip>true</unpack-manifestmf.skip>
 
@@ -111,23 +110,31 @@
     <coveralls.skip>${skipTests}</coveralls.skip>
     <sonar.skip>${skipTests}</sonar.skip>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.apiguardian</groupId>
         <artifactId>apiguardian-api</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.2</version>
       </dependency>
       <dependency>
         <groupId>io.vavr</groupId>
         <artifactId>vavr</artifactId>
-        <version>0.10.0</version>
+        <version>0.10.4</version>
       </dependency>
       <dependency>
         <groupId>pl.wavesoftware</groupId>
         <artifactId>eid-exceptions</artifactId>
         <version>2.0.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>pl.wavesoftware.testing</groupId>
+        <artifactId>junit5-starter</artifactId>
+        <version>1.1.0</version>
+        <type>pom</type>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -138,23 +145,12 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.0.1398</version>
-        </plugin>
-        <plugin>
-          <groupId>com.manamind.jgitflow</groupId>
-          <artifactId>jgitflow-maven-plugin</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <enableSshAgent>true</enableSshAgent>
-            <flowInitContext>
-              <versionTagPrefix>v</versionTagPrefix>
-            </flowInitContext>
-          </configuration>
+          <version>3.9.1.2184</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.3</version>
+          <version>0.8.8</version>
           <executions>
             <execution>
               <id>jacoco-initialize</id>
@@ -205,7 +201,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.8.1</version>
           <configuration>
             <compilerArgs>
               <arg>-Werror</arg>
@@ -216,7 +212,7 @@
 
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.2</version>
           <configuration>
             <archive>
               <manifest>
@@ -231,13 +227,8 @@
         </plugin>
 
         <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.1</version>
-        </plugin>
-
-        <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>3.0.0</version>
           <configuration>
             <trimStackTrace>false</trimStackTrace>
           </configuration>
@@ -245,7 +236,7 @@
 
         <plugin>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>3.0.0</version>
           <configuration>
             <trimStackTrace>false</trimStackTrace>
           </configuration>
@@ -389,31 +380,11 @@
           <name>env.GDMSESSION</name>
         </property>
       </activation>
-      <properties>
-        <sonar.analysis.mode>preview</sonar.analysis.mode>
-        <sonar.issuesReport.console.enable>true</sonar.issuesReport.console.enable>
-        <sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
-        <sonar.report.export.path>issues.json</sonar.report.export.path>
-      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-          </plugin>
-
-          <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>default</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sonar</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

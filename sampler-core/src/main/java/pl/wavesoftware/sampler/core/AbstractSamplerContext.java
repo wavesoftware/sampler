@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import pl.wavesoftware.sampler.api.RandomSource;
 import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.api.SamplerControl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,21 +38,35 @@ import java.util.function.Supplier;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 1.0.0
  */
-public abstract class AbstractSamplerContext
-  implements SamplerContext, AutoCloseable {
+public abstract class AbstractSamplerContext implements SamplerContext {
 
   private static final Logger LOGGER =
     LoggerFactory.getLogger(AbstractSamplerContext.class);
   private final Map<Class<? extends Sampler<?>>, Object> samples =
     Collections.synchronizedMap(new HashMap<>());
   private final ResolutionContext resolutionContext;
+  private final SamplerControl control;
 
-  protected AbstractSamplerContext(RandomSource randomSource) {
+  public AbstractSamplerContext() {
+    this(new DefaultRandomSource());
+  }
+
+  public AbstractSamplerContext(RandomSource randomSource) {
+    this(randomSource, new DefaultSamplerControl(randomSource));
+  }
+
+  public AbstractSamplerContext(RandomSource randomSource, SamplerControl control) {
     this.resolutionContext = new DefaultResolutionContext(
       samples::put,
       this::find,
       randomSource
     );
+    this.control = control;
+  }
+
+  @Override
+  public SamplerControl controller() {
+    return control;
   }
 
   @Override
